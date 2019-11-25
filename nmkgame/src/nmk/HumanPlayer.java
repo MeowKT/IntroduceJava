@@ -1,6 +1,7 @@
 package nmk;
 
 import java.io.PrintStream;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class HumanPlayer implements Player {
@@ -23,7 +24,16 @@ public class HumanPlayer implements Player {
             out.println(position);
             out.println(cell + "'s move");
             out.println("Enter row and column");
-            final Move move = new Move(in.nextInt() - 1, in.nextInt() - 1, cell);
+            int x = -1, y = -1;
+            try {
+                x = in.nextInt();
+                y = in.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Not a number. Try again");
+                in.nextLine();
+                continue;
+            }
+            final Move move = new Move(x, y, cell);
             if (position.isValid(move)) {
                 return move;
             }
