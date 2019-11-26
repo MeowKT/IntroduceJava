@@ -33,7 +33,7 @@ public class HumanPlayer implements Player {
                 in.nextLine();
                 continue;
             }
-            final Move move = new Move(x, y, cell);
+            final Move move = new Move(x - 1, y - 1, cell);
             if (position.isValid(move)) {
                 return move;
             }

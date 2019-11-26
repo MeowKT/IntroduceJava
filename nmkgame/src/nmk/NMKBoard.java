@@ -4,27 +4,25 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class NMKBoard implements Board, Position {
-    private static final Map<Cell, Character> SYMBOLS = Map.of(
-            Cell.X, 'X',
-            Cell.O, 'O',
-            Cell.E, '.'
-    );
-
     private final Cell[][] cells;
     private Cell turn;
     private final int k;
     private int used;
+    private int countPlayers;
+    private int numberTurn;
 
-    public NMKBoard(final int n, final int m, final int k) {
+    public NMKBoard(final int n, final int m, final int k, final int countPlayers) {
         if (n < 0 || m < 0 || k <= 0) {
             throw new IllegalArgumentException("Not a positive size of board or K");
         }
         this.cells = new Cell[n][m];
         this.k = k;
+        this.countPlayers = countPlayers;
+        this.numberTurn = 0;
         for (Cell[] row : cells) {
             Arrays.fill(row, Cell.E);
         }
-        turn = Cell.X;
+        turn = Cell.values()[0];
         used = 0;
     }
 
@@ -54,9 +52,8 @@ public class NMKBoard implements Board, Position {
                 return Result.WIN;
             }
         }
-
-        turn = turn == Cell.X ? Cell.O : Cell.X;
-        return used == cells.length * cells[0].length ? Result.DRAW :  Result.UNKNOWN;
+        turn = Cell.values()[(++numberTurn) % countPlayers];
+        return used == cells.length * cells[0].length ? Result.DRAW : Result.UNKNOWN;
     }
 
     private boolean checkWin(int row, int column, int dx, int dy) {
@@ -99,7 +96,7 @@ public class NMKBoard implements Board, Position {
         final int len = Math.max(String.valueOf(cells[0].length).length(), String.valueOf(cells.length).length());
         final StringBuilder sb = new StringBuilder(" ".repeat(len + 1));
         final String Digit = "%" + len + "d";
-        final String Char = "%" + len + "c";
+        final String Char = "%" + len + "s";
 
         for (int c = 0; c < cells[0].length; c++) {
             sb.append(String.format(Digit, c + 1)).append(" ");
@@ -108,7 +105,7 @@ public class NMKBoard implements Board, Position {
             sb.append("\n");
             sb.append(String.format(Digit, r + 1)).append(" ");
             for (int c = 0; c < cells[0].length; c++) {
-                sb.append(String.format(Char, SYMBOLS.get(cells[r][c]))).append(" ");
+                sb.append(String.format(Char, cells[r][c])).append(" ");
             }
         }
 

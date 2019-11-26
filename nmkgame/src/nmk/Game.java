@@ -8,9 +8,9 @@ public class Game {
     private final boolean log;
     private final Player[] players;
 
-    public Game(final boolean log, final Player player1, final Player player2) {
+    public Game(final boolean log, final List<Player> players) {
         this.log = log;
-        this.players = new Player[]{player1, player2};
+        this.players = players.toArray(new Player[players.size()]);
     }
 
     public void start() {
@@ -39,12 +39,13 @@ public class Game {
         do {
             this.start(n, m, k);
             System.out.println("Do you want play again?(write YES if you want): ");
-            ans = scanner.nextLine();
-        } while (ans.equals("YES"));
+            ans = scanner.nextLine().toLowerCase();
+        } while (ans.equals("yes"));
     }
 
     public void start(int n, int m, int k) {
-        System.out.println("Game result: " + this.play(new NMKBoard(n, m, k)));
+        int result = this.play(new NMKBoard(n, m, k, players.length));
+        System.out.println("Game result: " + (result == -2 ? "detected cheater player" : result));
     }
 
     public int play(Board board) {
@@ -67,8 +68,8 @@ public class Game {
             log("Player " + number + " won");
             return number;
         } else if (result == Result.LOSE) {
-            log("Player " + number + " lose");
-            return 3 - number;
+            log("Player " + number + " has cheats");
+            return -2;
         } else if (result == Result.DRAW) {
             log("Draw");
             return 0;
