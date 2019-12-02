@@ -30,15 +30,18 @@ abstract class AbstractBinaryOperator implements Expression {
         return expression instanceof Subtract || expression instanceof Divide;
     }
     
-        private boolean checkHardBrackets(Expression expression) {
-        if (checkSpecialOperators(expression) && this.getPriority() == ((AbstractBinaryOperator) expression).getPriority()) {
-            return true;
+    private boolean checkHardBrackets(Expression expression) {
+        if (!(expression instanceof AbstractBinaryOperator)) {
+            return false;
         }
-        if (checkSpecialOperators(this) &&
-                expression instanceof AbstractBinaryOperator &&
-                ((AbstractBinaryOperator) expression).getPriority() <= this.getPriority()) {
-            return true;
+        AbstractBinaryOperator expr = (AbstractBinaryOperator) expression;
+        if (checkSpecialOperators(this)) {
+            return this.getPriority() == expr.getPriority();
         }
+        if (checkSpecialOperators(expression)) {
+            return expression instanceof Divide && expr.getPriority() <= this.getPriority();
+        }
+
         return false;
     }
 
