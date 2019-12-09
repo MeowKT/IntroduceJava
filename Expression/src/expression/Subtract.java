@@ -2,8 +2,8 @@ package expression;
 
 public class Subtract extends AbstractBinaryOperator {
 
-    public Subtract(Expression a, Expression b) {
-        super(a, b);
+    public Subtract(AbstractExpression left, AbstractExpression right) {
+        super(left, right);
     }
 
     @Override
@@ -12,12 +12,18 @@ public class Subtract extends AbstractBinaryOperator {
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) - right.evaluate(x);
-    }
-
-    @Override
     public int getPriority() {
         return 1;
     }
+
+    @Override
+    protected int calc(int x, int y) {
+        return x - y;
+    }
+
+    @Override
+    protected boolean checkSpecialOperator() {
+        return true;
+    }
+
 }

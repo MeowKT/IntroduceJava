@@ -2,19 +2,28 @@ package expression;
 
 import java.util.Objects;
 
-abstract class AbstractBinaryOperator implements Expression {
-    protected Expression left;
-    protected Expression right;
+abstract class AbstractBinaryOperator extends AbstractExpression {
+    private AbstractExpression left;
+    private AbstractExpression right;
 
     protected abstract String getOperator();
 
     protected abstract int getPriority();
 
-    public abstract int evaluate(int x);
+    protected abstract int calc(int x, int y);
 
-    public AbstractBinaryOperator(Expression left, Expression right) {
+    protected abstract boolean checkSpecialOperator();
+
+    public AbstractBinaryOperator(AbstractExpression left, AbstractExpression right) {
         this.left = left;
         this.right = right;
+    }
+
+    public int evaluate(int x) {
+        return calc(left.evaluate(x), right.evaluate(x));
+    }
+    public int evaluate(int x, int y, int z) {
+        return calc(left.evaluate(x, y, z), right.evaluate(x, y, z));
     }
 
     private String getExpression(Expression expression, boolean isBracket) {
@@ -26,37 +35,28 @@ abstract class AbstractBinaryOperator implements Expression {
                 && ((AbstractBinaryOperator) expression).getPriority() < this.getPriority();
     }
 
-    private boolean checkSpecialOperators(Expression expression) {
-        return expression instanceof Subtract || expression instanceof Divide;
-    }
-    
     private boolean checkHardBrackets(Expression expression) {
-        if (!(expression instanceof AbstractBinaryOperator)) {
-            return false;
+        if (expression instanceof AbstractBinaryOperator
+                && ((AbstractBinaryOperator) expression).checkSpecialOperator()
+                    && this.getPriority() == ((AbstractBinaryOperator) expression).getPriority()) {
+            return true;
         }
-        AbstractBinaryOperator expr = (AbstractBinaryOperator) expression;
-        if (checkSpecialOperators(this)) {
-            return this.getPriority() == expr.getPriority();
-        }
-        if (checkSpecialOperators(expression)) {
-            return expression instanceof Divide && expr.getPriority() <= this.getPriority();
-        }
-
-        return false;
+        return this.checkSpecialOperator()
+                && expression instanceof AbstractBinaryOperator
+                && ((AbstractBinaryOperator) expression).getPriority() <= this.getPriority();
     }
+
 
     @Override
     public String toMiniString() {
-        StringBuilder sb = new StringBuilder(getExpression(left, checkSimpleBrackets(left)))
-                .append(getOperator())
-                .append(getExpression(right, checkSimpleBrackets(right) || checkHardBrackets(right)));
-        return sb.toString();
+        return getExpression(left, checkSimpleBrackets(left))
+                + getOperator()
+                + getExpression(right, checkSimpleBrackets(right) || checkHardBrackets(right));
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("(").append(left).append(getOperator()).append(right).append(")");
-        return sb.toString();
+        return "(" + left + getOperator() + right + ")";
     }
 
     @Override
@@ -70,6 +70,6 @@ abstract class AbstractBinaryOperator implements Expression {
 
     @Override
     public int hashCode() {
-        return 4241 * left.hashCode() + 43 * Objects.hashCode(getOperator()) + right.hashCode() + 1 + 'S' + 'A' + 'V' + 'V' + 'A';
+        return 13 * left.hashCode() + 43 * Objects.hashCode(getOperator()) + 41 * right.hashCode();
     }
 }

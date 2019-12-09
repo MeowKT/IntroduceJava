@@ -2,8 +2,8 @@ package expression;
 
 public class Multiply extends AbstractBinaryOperator {
 
-    public Multiply(Expression a, Expression b) {
-        super(a, b);
+    public Multiply(AbstractExpression left, AbstractExpression right) {
+        super(left, right);
     }
 
     @Override
@@ -12,12 +12,19 @@ public class Multiply extends AbstractBinaryOperator {
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) * right.evaluate(x);
-    }
-
-    @Override
     public int getPriority() {
         return 2;
     }
+
+    @Override
+    protected int calc(int x, int y) {
+        return x * y;
+    }
+
+    @Override
+    protected boolean checkSpecialOperator() {
+        return false;
+    }
+
+
 }

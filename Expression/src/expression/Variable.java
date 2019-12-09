@@ -2,11 +2,11 @@ package expression;
 
 import java.util.Objects;
 
-public class Variable implements Expression {
-    private String x;
+public class Variable extends AbstractExpression {
+    private String var;
 
-    public Variable(String x) {
-        this.x = x;
+    public Variable(String var) {
+        this.var = var;
     }
 
     @Override
@@ -15,8 +15,16 @@ public class Variable implements Expression {
     }
 
     @Override
+    public int evaluate(int x, int y, int z) {
+        if (this.var.equals("x")) return x;
+        if (this.var.equals("y")) return y;
+        if (this.var.equals("z")) return z;
+        return -1;
+    }
+
+    @Override
     public String toString() {
-        return x;
+        return var;
     }
 
     @Override
@@ -30,11 +38,11 @@ public class Variable implements Expression {
             return false;
         }
         Variable variable = (Variable) object;
-        return Objects.equals(x, variable.x);
+        return Objects.equals(var, variable.var);
     }
 
     @Override
     public int hashCode() {
-        return 313 * Objects.hash(x) + 'S' + 'A' + 'V' + 'V' + 'A';
+        return 313 * Objects.hash(var);
     }
 }

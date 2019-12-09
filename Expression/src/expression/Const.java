@@ -2,7 +2,7 @@ package expression;
 
 import java.util.Objects;
 
-public class Const implements Expression {
+public class Const extends AbstractExpression {
     private int val;
 
     public Const(int val) {
@@ -11,6 +11,11 @@ public class Const implements Expression {
 
     @Override
     public int evaluate(int x) {
+        return val;
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
         return val;
     }
 
@@ -35,6 +40,6 @@ public class Const implements Expression {
 
     @Override
     public int hashCode() {
-        return Objects.hash(val) + 'S' + 'A' + 'V' + 'V' + 'A';
+        return 43 * Objects.hash(val);
     }
 }

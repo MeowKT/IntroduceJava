@@ -5,8 +5,9 @@ import java.util.List;
 
 
 /**
- * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
+ * @author Geyorgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
+
 public class ExpressionTest extends BaseTest {
     private final List<ToMiniString> prev = new ArrayList<>();
     private final boolean checkMini;

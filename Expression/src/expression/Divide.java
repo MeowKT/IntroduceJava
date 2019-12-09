@@ -2,8 +2,8 @@ package expression;
 
 public class Divide extends AbstractBinaryOperator {
 
-    public Divide(Expression a, Expression b) {
-        super(a, b);
+    public Divide(AbstractExpression left, AbstractExpression right) {
+        super(left, right);
     }
 
     @Override
@@ -17,7 +17,13 @@ public class Divide extends AbstractBinaryOperator {
     }
 
     @Override
-    public int evaluate(int x) {
-        return left.evaluate(x) / right.evaluate(x);
+    protected int calc(int x, int y) {
+        return x / y;
     }
+
+    @Override
+    protected boolean checkSpecialOperator() {
+        return true;
+    }
+
 }
